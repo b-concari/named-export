@@ -30,5 +30,6 @@ fi
 [ -f $OUTPUT ] && rm $OUTPUT
 
 [ $NO_COLLECT -eq 0 ] && find $ZONEDIR -type f -print | xargs -I% sh -c "echo %; if [ \"\$(./parse_bin.rb %)\" ]; then named-compilezone -f raw -F text -o zones/\$(basename %.txt) \$(./parse_bin.rb %) % ; fi ; echo"
-for zonefile in zones/*; do ./parse_zone.rb $zonefile >> $OUTPUT; done
+for zonefile in zones/*; do ./parse_zone.rb $zonefile >> .${OUTPUT}.tmp; done
+sort .${OUTPUT}.tmp | uniq > ${OUTPUT} && rm .${OUTPUT}.tmp
 
